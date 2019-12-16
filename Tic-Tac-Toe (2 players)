@@ -1,0 +1,161 @@
+# Bee Vang & Alec Packett
+# 12/15/2019
+# This is our Tic-Tac-Toe program. This program has been tested and ran on the latest python 3.7 - 3.8 version and works great.
+# We have 10 functions here working side by side with one another utilizing nest-while loops and if statements to run a fully functional game
+# making good use of list, dictonaries and what's learnt so far.
+
+def drawBoard1(board):
+     # The function prints out the board with the mark provided by Player 1.
+     # If the space is not available, then the player is asked to give another
+     # space number until they give a valid number.
+    square = askplace()
+    while board[square] != ' ':
+        print('Space is full. Try a different number.')
+        square = askplace()
+    board[square]='X'
+    print(board[0],'|',board[1],'|',board[2],'\n'+board[3],'|',
+        board[4],'|',board[5],'\n'+board[6],'|',board[7],'|',board[8])
+
+
+def drawBoard2(board):
+     # The function prints out the board with the mark provided by Player 2.
+     # If the space is not available, then the player is asked to give another
+     # space number until they give a valid number.
+    square = askplace()
+    while board[square] != ' ':
+        print('Space is full. Try a different number.')
+        square = askplace()
+    board[square]='O'
+    print(board[0],'|',board[1],'|',board[2],'\n'+board[3],'|',
+        board[4],'|',board[5],'\n'+board[6],'|',board[7],'|',board[8])
+
+
+def is_board_full(board):
+    # Return True if every space on the board has been taken. Otherwise return False.
+    for i in board:
+        if i == ' ':
+            return False
+    return True
+
+
+def print_help_board():
+    # This will print out the tutorial board to show what numbers are mapped to what spaces.
+    board=get_empty_board()
+    board[0]='1'
+    board[1]='2'
+    board[2]='3'
+    board[3]='4'
+    board[4]='5'
+    board[5]='6'
+    board[6]='7'
+    board[7]='8'
+    board[8]='9'
+    print(board[0],'|',board[1],'|',board[2],'\n'+board[3],'|',
+          board[4],'|',board[5],'\n'+board[6],'|',board[7],'|',board[8])
+
+
+def get_empty_board():
+    # This is the empty board that will be used as the empty template
+    # that will be used for when the game begins, and for filling in
+    # the spaces with each of the corresponding player markings.
+    board=[' ',' ',' ',' ',' ',' ',' ',' ',' ']
+    return board
+
+
+def whoGoesFirst():
+    # This function is used to make sure which player the starting player
+    # wants to be, and what mark they will be represented once they choose,
+    # as well as the other player and their marking.
+    player = input("Are you player 1 or 2? ")
+    while player!='1' and player!='2':
+        print('Error: Invlaid Number')
+        player=input('Are you player 1 or 2? ')
+    if player == '1':
+        print ("You are player 1")
+        print ('Your mark is X')
+        print ("Player 2's mark is O")
+        return ('Player 1')
+    elif player == '2':
+        print ("You are player 2")
+        print ('Your mark is O')
+        print ("Player 1's mark is X")
+        return ('Player 2')
+
+
+def xisWinner(board):
+    # Function returns True if that player 1 has won.
+    if (((board[6] == 'X') and (board[7] == 'X') and (board[8] == 'X')) or # across the bottom
+    ((board[3] == 'X') and (board[4] == 'X') and (board[5] == 'X')) or # across the middle
+    ((board[0] == 'X') and (board[1] == 'X') and (board[2] == 'X')) or # across the top
+    ((board[6] == 'X') and (board[3] == 'X') and (board[0] == 'X')) or # down the left side
+    ((board[7] == 'X') and (board[4] == 'X') and (board[1] == 'X')) or # down the middle
+    ((board[8] == 'X') and (board[5] == 'X') and (board[2] == 'X')) or # down the right side
+    ((board[6] == 'X') and (board[4] == 'X') and (board[2] == 'X')) or # diagonal
+    ((board[8] == 'X') and (board[4] == 'X') and (board[0] == 'X'))):  #diagonal
+        return True
+
+
+def oisWinner(board):
+    # Function returns True if that player 2 has won.
+    if (((board[6] == 'O') and (board[7] == 'O') and (board[8] == 'O')) or # across the bottom
+    ((board[3] == 'O') and (board[4] == 'O') and (board[5] == 'O')) or # across the middle
+    ((board[0] == 'O') and (board[1] == 'O') and (board[2] == 'O')) or # across the top
+    ((board[6] == 'O') and (board[3] == 'O') and (board[0] == 'O')) or # down the left side
+    ((board[7] == 'O') and (board[4] == 'O') and (board[1] == 'O')) or # down the middle
+    ((board[8] == 'O') and (board[5] == 'O') and (board[2] == 'O')) or # down the right side
+    ((board[6] == 'O') and (board[4] == 'O') and (board[2] == 'O')) or # diagonal
+    ((board[8] == 'O') and (board[4] == 'O') and (board[0] == 'O'))):  #diagonal
+        return True
+
+
+def askplace():
+    # This asks what number the player wants to choose for their space
+    # based on the numbers corresponding to each one, and if they are off,
+    # then they will be asked until they give a right number.
+    place=int(input('What is your move (1-9)? '))-1
+    while place>8 or place<0:
+        print('Invalid space')
+        place=int(input('Try again: '))-1
+    return place
+
+
+def main():
+    print ("Welcome to tic-tac-toe!")
+    print("Take turns choosing your spaces.\nThe program will keep track of who's turn it is.")
+    print('Enter the number of the space on the board by the following arrangement:')
+    print_help_board()
+    gameIsPlaying = True
+    theBoard = get_empty_board()
+    while gameIsPlaying == True:
+        current_turn = whoGoesFirst()
+        print(str(current_turn) + ' will go first.')
+        turn = {'X':'Player 1', 'O':'Player 2'}
+        gameIsPlaying = True
+        while gameIsPlaying == True:
+            if current_turn == 'Player 1':
+                # Current Players’s turn.
+                print(str(turn['X'])+"'s turn")
+                drawBoard1(theBoard)
+                if xisWinner(theBoard) == True:
+                    print(str(turn['X']), 'has won the game!')
+                    gameIsPlaying = False
+                elif is_board_full(theBoard) == True:
+                    print('The game is a tie!')
+                    gameIsPlaying = False
+                else:
+                    current_turn = turn['O']
+            elif current_turn == 'Player 2':
+                # Other Player's turn
+                print(str(turn['O'])+"'s turn")
+                drawBoard2(theBoard)
+                if oisWinner(theBoard):
+                    print(str(turn['O']), 'has won the game!')
+                    gameIsPlaying = False
+                elif is_board_full(theBoard) == True:
+                    print('The game is a tie!')
+                    gameIsPlaying = False
+                else:
+                    current_turn = turn['X']
+            
+
+main()
